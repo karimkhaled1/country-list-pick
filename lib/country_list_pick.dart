@@ -12,31 +12,23 @@ export 'support/code_country.dart';
 export 'country_selection_theme.dart';
 
 class CountryListPick extends StatefulWidget {
-  CountryListPick(
-      {this.onChanged,
-      this.initialSelection,
-      this.appBar,
-      this.pickerBuilder,
-      this.countryBuilder,
-      this.theme});
+  CountryListPick({this.onChanged, this.initialSelection, this.appBar, this.pickerBuilder, this.countryBuilder, this.theme});
   final String initialSelection;
   final ValueChanged<CountryCode> onChanged;
   final PreferredSizeWidget appBar;
-  final Widget Function(BuildContext context, CountryCode countryCode)
-      pickerBuilder;
+  final Widget Function(BuildContext context, CountryCode countryCode) pickerBuilder;
   final CountryTheme theme;
-  final Widget Function(BuildContext context, CountryCode countryCode)
-      countryBuilder;
+  final Widget Function(BuildContext context, CountryCode countryCode) countryBuilder;
 
   @override
   _CountryListPickState createState() {
-    List<Map> jsonList =
-        this.theme?.showEnglishName ?? true ? countriesEnglish : codes;
+    List<Map> jsonList = (this.theme?.showEnglishName ?? true) || (this.theme?.showArabichName ?? true) ? countriesEnglish : codes;
 
     List elements = jsonList
         .map((s) => CountryCode(
               name: s['name'],
               code: s['code'],
+              nameAr: s['name_ar'],
               dialCode: s['dial_code'],
               flagUri: 'flags/${s['code'].toLowerCase()}.png',
             ))
@@ -54,9 +46,7 @@ class _CountryListPickState extends State<CountryListPick> {
   void initState() {
     if (widget.initialSelection != null) {
       selectedItem = elements.firstWhere(
-          (e) =>
-              (e.code.toUpperCase() == widget.initialSelection.toUpperCase()) ||
-              (e.dialCode == widget.initialSelection),
+          (e) => (e.code.toUpperCase() == widget.initialSelection.toUpperCase()) || (e.dialCode == widget.initialSelection),
           orElse: () => elements[0] as CountryCode);
     } else {
       selectedItem = elements[0];
@@ -65,8 +55,7 @@ class _CountryListPickState extends State<CountryListPick> {
     super.initState();
   }
 
-  void _awaitFromSelectScreen(BuildContext context, PreferredSizeWidget appBar,
-      CountryTheme theme) async {
+  void _awaitFromSelectScreen(BuildContext context, PreferredSizeWidget appBar, CountryTheme theme) async {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -91,48 +80,51 @@ class _CountryListPickState extends State<CountryListPick> {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      padding: EdgeInsets.symmetric(horizontal: 0.0),
-      onPressed: () {
-        _awaitFromSelectScreen(context, widget.appBar, widget.theme);
-      },
-      child: widget.pickerBuilder != null
-          ? widget.pickerBuilder(context, selectedItem)
-          : Flex(
-              direction: Axis.horizontal,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (widget.theme?.isShowFlag ?? true == true)
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Image.asset(
-                        selectedItem.flagUri,
-                        package: 'country_list_pick',
-                        width: 32.0,
+    return Directionality(
+      textDirection: widget.theme?.showEnglishName ?? true ? TextDirection.ltr : TextDirection.rtl,
+      child: FlatButton(
+        padding: EdgeInsets.symmetric(horizontal: 0.0),
+        onPressed: () {
+          _awaitFromSelectScreen(context, widget.appBar, widget.theme);
+        },
+        child: widget.pickerBuilder != null
+            ? widget.pickerBuilder(context, selectedItem)
+            : Flex(
+                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  if (widget.theme?.isShowFlag ?? true == true)
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Image.asset(
+                          selectedItem.flagUri,
+                          package: 'country_list_pick',
+                          width: 32.0,
+                        ),
                       ),
                     ),
-                  ),
-                if (widget.theme?.isShowCode ?? true == true)
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Text(selectedItem.toString()),
+                  if (widget.theme?.isShowCode ?? true == true)
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Text(selectedItem.toString()),
+                      ),
                     ),
-                  ),
-                if (widget.theme?.isShowTitle ?? true == true)
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Text(selectedItem.toCountryStringOnly()),
+                  if (widget.theme?.isShowTitle ?? true == true)
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Text(selectedItem.toCountryStringOnly()),
+                      ),
                     ),
-                  ),
-                if (widget.theme?.isDownIcon ?? true == true)
-                  Flexible(
-                    child: Icon(Icons.keyboard_arrow_down),
-                  )
-              ],
-            ),
+                  if (widget.theme?.isDownIcon ?? true == true)
+                    Flexible(
+                      child: Icon(Icons.keyboard_arrow_down),
+                    )
+                ],
+              ),
+      ),
     );
   }
 }

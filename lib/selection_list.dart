@@ -8,9 +8,7 @@ import 'package:flutter/services.dart';
 import 'country_list_pick.dart';
 
 class SelectionList extends StatefulWidget {
-  SelectionList(this.elements, this.initialSelection,
-      {Key key, this.appBar, this.theme, this.countryBuilder})
-      : super(key: key);
+  SelectionList(this.elements, this.initialSelection, {Key key, this.appBar, this.theme, this.countryBuilder}) : super(key: key);
 
   final PreferredSizeWidget appBar;
   final List elements;
@@ -47,7 +45,6 @@ class _SelectionListState extends State<SelectionList> {
     });
     _controllerScroll = ScrollController();
     //_controller.addListener(_scrollListener);
-    _controllerScroll.addListener(_scrollListener);
     super.initState();
   }
 
@@ -55,34 +52,7 @@ class _SelectionListState extends State<SelectionList> {
     Navigator.pop(context, initialSelection);
   }
 
-  List _alphabet = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z'
-  ];
+  List _alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
   @override
   Widget build(BuildContext context) {
@@ -91,109 +61,88 @@ class _SelectionListState extends State<SelectionList> {
       statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarBrightness:
-          Platform.isAndroid ? Brightness.dark : Brightness.light,
+      statusBarBrightness: Platform.isAndroid ? Brightness.dark : Brightness.light,
     ));
     height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: widget.appBar,
-      body: Container(
-        color: Color(0xfff4f4f4),
-        child: LayoutBuilder(builder: (context, contrainsts) {
-          diff = height - contrainsts.biggest.height;
-          _heightscroller = (contrainsts.biggest.height) / _alphabet.length;
-          _sizeheightcontainer = (contrainsts.biggest.height);
-          return Stack(
-            children: <Widget>[
-              CustomScrollView(
-                controller: _controllerScroll,
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(widget.theme?.searchText ?? 'SEARCH'),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: TextField(
-                            controller: _controller,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.only(
-                                  left: 15, bottom: 0, top: 0, right: 15),
-                              hintText:
-                                  widget.theme?.searchHintText ?? "Search...",
-                            ),
-                            onChanged: _filterElements,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child:
-                              Text(widget.theme?.lastPickText ?? 'LAST PICK'),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: ListTile(
-                              leading: Image.asset(
-                                widget.initialSelection.flagUri,
-                                package: 'country_list_pick',
-                                width: 32.0,
-                              ),
-                              title: Text(widget.initialSelection.name),
-                              trailing: Padding(
-                                padding: const EdgeInsets.only(right: 20.0),
-                                child: Icon(Icons.check, color: Colors.green),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                      ],
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return widget.countryBuilder != null
-                          ? widget.countryBuilder(
-                              context, countries.elementAt(index))
-                          : getListCountry(countries.elementAt(index));
-                    }, childCount: countries.length),
-                  )
-                ],
-              ),
-              if (isShow == true)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onVerticalDragUpdate: _onVerticalDragUpdate,
-                    onVerticalDragStart: _onVerticalDragStart,
-                    child: Container(
-                      height: 20.0 * 30,
-                      color: Colors.transparent,
+    return Directionality(
+      textDirection: widget.theme?.showEnglishName ?? true ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        appBar: widget.appBar,
+        body: Container(
+          color: Color(0xfff4f4f4),
+          child: LayoutBuilder(builder: (context, contrainsts) {
+            diff = height - contrainsts.biggest.height;
+            _heightscroller = (contrainsts.biggest.height) / _alphabet.length;
+            _sizeheightcontainer = (contrainsts.biggest.height);
+            return Stack(
+              children: <Widget>[
+                CustomScrollView(
+                  controller: _controllerScroll,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: []..addAll(
-                            List.generate(_alphabet.length,
-                                (index) => _getAlphabetItem(index)),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(widget.theme?.searchText ?? 'SEARCH'),
                           ),
+                          Container(
+                            color: Colors.white,
+                            child: TextField(
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                contentPadding: EdgeInsets.only(left: 15, bottom: 0, top: 0, right: 15),
+                                hintText: widget.theme?.searchHintText ?? "Search...",
+                              ),
+                              onChanged: _filterElements,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(widget.theme?.lastPickText ?? 'LAST PICK'),
+                          ),
+                          Container(
+                            color: Colors.white,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: ListTile(
+                                leading: Image.asset(
+                                  widget.initialSelection.flagUri,
+                                  package: 'country_list_pick',
+                                  width: 32.0,
+                                ),
+                                title: Text(widget.theme?.showEnglishName ?? true ? widget.initialSelection.name : widget.initialSelection.nameAr),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Icon(Icons.check, color: Colors.green),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                        ],
                       ),
                     ),
-                  ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        return widget.countryBuilder != null
+                            ? widget.countryBuilder(context, countries.elementAt(index))
+                            : getListCountry(countries.elementAt(index));
+                      }, childCount: countries.length),
+                    )
+                  ],
                 ),
-            ],
-          );
-        }),
+              ],
+            );
+          }),
+        ),
       ),
     );
   }
@@ -210,7 +159,7 @@ class _SelectionListState extends State<SelectionList> {
             package: 'country_list_pick',
             width: 30.0,
           ),
-          title: Text(e.name),
+          title: Text(widget.theme?.showEnglishName ?? true ? e.name : e.nameAr ?? e.name),
           onTap: () {
             _sendDataBack(context, e);
           },
@@ -228,8 +177,9 @@ class _SelectionListState extends State<SelectionList> {
             _text = _alphabet[posSelected];
             if (_text != _oldtext) {
               for (var i = 0; i < countries.length; i++) {
-                if (_text.toString().compareTo(
-                        countries[i].name.toString().toUpperCase()[0]) ==
+                if (_text
+                        .toString()
+                        .compareTo((widget.theme?.showEnglishName ?? true ? countries[i].name : countries[i].nameAr).toString().toUpperCase()[0]) ==
                     0) {
                   _controllerScroll.jumpTo((i * _itemsizeheight) + 10);
                   break;
@@ -244,24 +194,15 @@ class _SelectionListState extends State<SelectionList> {
           height: 20,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: index == posSelected
-                ? widget.theme?.alphabetSelectedBackgroundColor ?? Colors.blue
-                : Colors.transparent,
+            color: index == posSelected ? widget.theme?.alphabetSelectedBackgroundColor ?? Colors.blue : Colors.transparent,
             shape: BoxShape.circle,
           ),
           child: Text(
             _alphabet[index],
             textAlign: TextAlign.center,
             style: (index == posSelected)
-                ? TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color:
-                        widget.theme?.alphabetSelectedTextColor ?? Colors.white)
-                : TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: widget.theme?.alphabetTextColor ?? Colors.black),
+                ? TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: widget.theme?.alphabetSelectedTextColor ?? Colors.white)
+                : TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: widget.theme?.alphabetTextColor ?? Colors.black),
           ),
         ),
       ),
@@ -273,27 +214,22 @@ class _SelectionListState extends State<SelectionList> {
     setState(() {
       countries = widget.elements
           .where((e) =>
-              e.code.contains(s) ||
-              e.dialCode.contains(s) ||
-              e.name.toUpperCase().contains(s))
+              e.code.contains(s) || e.dialCode.contains(s) || widget.theme?.showEnglishName ?? true ? e.name : e.nameAr.toUpperCase().contains(s))
           .toList();
     });
   }
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
     setState(() {
-      if ((_offsetContainer + details.delta.dy) >= 0 &&
-          (_offsetContainer + details.delta.dy) <=
-              (_sizeheightcontainer - _heightscroller)) {
+      if ((_offsetContainer + details.delta.dy) >= 0 && (_offsetContainer + details.delta.dy) <= (_sizeheightcontainer - _heightscroller)) {
         _offsetContainer += details.delta.dy;
-        posSelected =
-            ((_offsetContainer / _heightscroller) % _alphabet.length).round();
+        posSelected = ((_offsetContainer / _heightscroller) % _alphabet.length).round();
         _text = _alphabet[posSelected];
         if (_text != _oldtext) {
           for (var i = 0; i < countries.length; i++) {
             if (_text
                     .toString()
-                    .compareTo(countries[i].name.toString().toUpperCase()[0]) ==
+                    .compareTo((widget.theme?.showEnglishName ?? true ? countries[i].name : countries[i].nameAr).toString().toUpperCase()[0]) ==
                 0) {
               _controllerScroll.jumpTo((i * _itemsizeheight) + 15);
               break;
@@ -307,23 +243,5 @@ class _SelectionListState extends State<SelectionList> {
 
   void _onVerticalDragStart(DragStartDetails details) {
     _offsetContainer = details.globalPosition.dy - diff;
-  }
-
-  _scrollListener() {
-    int scrollPosition =
-        (_controllerScroll.position.pixels / _itemsizeheight).round();
-    if (scrollPosition < countries.length) {
-      String countryName = countries.elementAt(scrollPosition).name;
-      setState(() {
-        posSelected =
-            countryName[0].toUpperCase().codeUnitAt(0) - 'A'.codeUnitAt(0);
-      });
-    }
-
-    if ((_controllerScroll.offset) >=
-        (_controllerScroll.position.maxScrollExtent)) {}
-    if (_controllerScroll.offset <=
-            _controllerScroll.position.minScrollExtent &&
-        !_controllerScroll.position.outOfRange) {}
   }
 }

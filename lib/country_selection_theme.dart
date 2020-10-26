@@ -13,21 +13,24 @@ class CountryTheme {
   final bool isDownIcon;
   final String initialSelection;
   final bool showEnglishName;
+  final bool showArabichName;
+
   //final void Function() systemUiOverlayStyle;
 
-  CountryTheme({
-    //this.systemUiOverlayStyle,
-    this.searchText,
-    this.searchHintText,
-    this.lastPickText,
-    this.alphabetSelectedBackgroundColor,
-    this.alphabetTextColor,
-    this.alphabetSelectedTextColor,
-    this.isShowTitle,
-    this.isShowFlag,
-    this.isShowCode,
-    this.isDownIcon,
-    this.initialSelection,
-    this.showEnglishName,
-  });
+  CountryTheme(
+      {
+      //this.systemUiOverlayStyle,
+      this.searchText,
+      this.searchHintText,
+      this.lastPickText,
+      this.alphabetSelectedBackgroundColor,
+      this.alphabetTextColor,
+      this.alphabetSelectedTextColor,
+      this.isShowTitle,
+      this.isShowFlag,
+      this.isShowCode,
+      this.isDownIcon,
+      this.initialSelection,
+      this.showEnglishName,
+      this.showArabichName});
 }
