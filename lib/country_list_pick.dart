@@ -91,6 +91,7 @@ class _CountryListPickState extends State<CountryListPick> {
             ? widget.pickerBuilder(context, selectedItem)
             : Flex(
                 direction: Axis.horizontal,
+                textDirection: widget.theme?.showEnglishName ?? true ? TextDirection.ltr : TextDirection.rtl,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   if (widget.theme?.isShowFlag ?? true == true)
@@ -115,7 +116,7 @@ class _CountryListPickState extends State<CountryListPick> {
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Text(selectedItem.toCountryStringOnly()),
+                        child: Text(widget.theme?.showEnglishName ?? true ? selectedItem.name : selectedItem.nameAr),
                       ),
                     ),
                   if (widget.theme?.isDownIcon ?? true == true)
