@@ -210,12 +210,22 @@ class _SelectionListState extends State<SelectionList> {
   }
 
   void _filterElements(String s) {
-    s = s.toUpperCase();
     setState(() {
-      countries = widget.elements
-          .where((e) =>
-              e.code.contains(s) || e.dialCode.contains(s) || widget.theme?.showEnglishName ?? true ? e.name : e.nameAr.toUpperCase().contains(s))
-          .toList();
+      countries = widget.elements.where((e) {
+        try {
+          return e.code.contains(s.toUpperCase()) ||
+              e.dialCode.contains(s.toUpperCase()) ||
+              e.name.toUpperCase().contains(s.toUpperCase()) ||
+              e.nameAr.contains(s);
+        } catch (sse) {
+          print(e.name);
+          print(sse.toString());
+          return null;
+        }
+
+        //
+      }).toList();
+      print(countries);
     });
   }
 
